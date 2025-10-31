@@ -1,0 +1,15 @@
+.header{
+    -fx-border-color:black;
+    -fx-alignment:center;
+
+}
+    .containerSeleccionarBots{
+    -fx-alignment:center;
+}
+
+
+.footer{
+        -fx-border-color:black;
+        -fx-alignment:center;
+
+}
