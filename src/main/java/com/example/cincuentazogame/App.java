@@ -5,15 +5,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.net.URL;
 
 public class App extends Application {
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+    public void start(Stage stage) throws Exception {
+
+        // 1. PROBAR que el recurso existe
+        URL fxmlUrl = App.class.getResource("/com/example/cincuentazogame/view/main-view.fxml");
+        System.out.println("FXML URL = " + fxmlUrl);
+
+        if (fxmlUrl == null) {
+            // Si llegamos aquí, la ruta está mal
+            throw new IllegalStateException("No se encontró el FXML en el classpath");
+        }
+
+        // 2. Cargar normal
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Cincuentazo");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
