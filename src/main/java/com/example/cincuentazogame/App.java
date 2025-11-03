@@ -14,14 +14,7 @@ public class App extends Application {
 
         // 1. PROBAR que el recurso existe
         URL fxmlUrl = App.class.getResource("/com/example/cincuentazogame/view/main-view.fxml");
-        System.out.println("FXML URL = " + fxmlUrl);
 
-        if (fxmlUrl == null) {
-            // Si llegamos aquí, la ruta está mal
-            throw new IllegalStateException("No se encontró el FXML en el classpath");
-        }
-
-        // 2. Cargar normal
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Cincuentazo");

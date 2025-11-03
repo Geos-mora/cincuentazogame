@@ -1,0 +1,23 @@
+.contenedorHead{
+    -fx-border-color:red;
+    -fx-alignment:center;
+    -fx-padding:10;
+}
+.contenedorBody{
+    -fx-border-color:blue;
+    -fx-alignment:center;
+    -fx-padding:10;
+}
+.contenedorFooter{
+    -fx-border-color:black;
+    -fx-alignment:center;
+    -fx-padding:10;
+
+}
+
+.cartasJugador{
+      -fx-border-color:red;
+}
+.cartasBots{
+      -fx-border-color:red;
+}
