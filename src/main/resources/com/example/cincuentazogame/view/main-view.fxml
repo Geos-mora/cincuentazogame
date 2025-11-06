@@ -7,26 +7,54 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane prefHeight="400.0" prefWidth="607.0" stylesheets="@main-styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cincuentazogame.controller.MainController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" styleClass="header" BorderPane.alignment="CENTER">
             <Label text="CINCUENTAZO" />
       </HBox>
    </top>
-   <center>
+<!--
+    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="mainBody" />
-         <VBox styleClass="containerSeleccionarBots">
-               <Label text="elige el numero de de bots a jugar " />
-                     <HBox prefHeight="14.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
+         <VBox prefHeight="176.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
+               <Label prefHeight="125.0" prefWidth="270" text="Elige el numero de jugadores" />
+                     <HBox prefHeight="0.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
                            <Button mnemonicParsing="false" text="1" />
                            <Button mnemonicParsing="false" text="2" />
                            <Button mnemonicParsing="false" text="3" />
+               <Button mnemonicParsing="false" text="4" />
                      </HBox>
          </VBox>
 
       </VBox>
    </center>
+   -->
+
+    <center>
+        <VBox alignment="CENTER" spacing="10">
+            <!-- Imagen animada -->
+            <ImageView fitHeight="100" preserveRatio="true">
+                <image>
+                    <Image url="@images/baraja3.gif" />
+                </image>
+            </ImageView>
+
+            <!-- Cuerpo principal -->
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="mainBody" />
+            <VBox prefHeight="176.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
+                <Label prefHeight="125.0" prefWidth="270" text="Elige el número de jugadores" />
+                <HBox prefHeight="0.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
+                    <Button mnemonicParsing="false" text="1" />
+                    <Button mnemonicParsing="false" text="2" />
+                    <Button mnemonicParsing="false" text="3" />
+                    <Button mnemonicParsing="false" text="4" />
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
     <bottom>
         <HBox prefHeight="49.0" prefWidth="607.0" styleClass="footer" BorderPane.alignment="CENTER">
          <children>
