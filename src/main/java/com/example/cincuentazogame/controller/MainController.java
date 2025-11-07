@@ -1,5 +1,7 @@
 package com.example.cincuentazogame.controller;
 
+import com.example.cincuentazogame.model.Jugador;
+import com.example.cincuentazogame.model.Partida;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,9 +28,26 @@ public class MainController {
         stage.setScene(tableroScene);
         stage.setTitle("Cincuentazo - Tablero");
         stage.show();
+
+
     }
     /// ------------------------------------------------------------------------------------------------------------
+    private Partida partida;
 
+    @FXML
+    public void initialize() {
+        // 🔹 Prueba rápida: crear partida con 2 jugadores máquina
+        partida = new Partida(2); // 1 humano + 2 máquinas
+
+        System.out.println("=== Inicio de la partida ===");
+        System.out.println("Carta inicial en la mesa: " + partida.getMesa().get(0));
+        System.out.println("Suma inicial de la mesa: " + partida.getSumaMesa());
+
+        System.out.println("\nJugadores y sus manos iniciales:");
+        for (Jugador j : partida.getJugadores()) {
+            System.out.println(j.getNombre() + " → " + j.getMano());
+        }
+    }
 
 
 }

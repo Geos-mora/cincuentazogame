@@ -1,6 +1,7 @@
 module com.example.cincuentazogame {
     requires javafx.controls;
     requires javafx.fxml;
+    //requires com.example.cincuentazogame;
 
     // 👇 abrir ambos paquetes para FXML
     opens com.example.cincuentazogame.controller to javafx.fxml;
