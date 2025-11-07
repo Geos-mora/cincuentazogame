@@ -32,10 +32,14 @@ public class MainController {
 
     }
     /// ------------------------------------------------------------------------------------------------------------
+
+    //prueba rapido solo para ensayar que las clases carta, mazo, jugador,
+    // jugador humano, jugador maquina, y partida, funcionan
+
     private Partida partida;
 
     @FXML
-    public void initialize() {
+    public void initialize(){
         // 🔹 Prueba rápida: crear partida con 2 jugadores máquina
         partida = new Partida(2); // 1 humano + 2 máquinas
 
