@@ -12,7 +12,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        // 1. PROBAR que el recurso existe
+        /* 1. PROBAR que el recurso existe*/
         URL fxmlUrl = App.class.getResource("/com/example/cincuentazogame/view/main-view.fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlUrl);

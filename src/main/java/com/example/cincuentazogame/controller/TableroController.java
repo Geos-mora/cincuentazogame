@@ -19,32 +19,32 @@ public class TableroController {
 
     private Partida partida;
 
-    // ====== Elementos del tablero (asigna los fx:id en tablero-view.fxml) ======
+    /* ====== Elementos del tablero (asigna los fx:id en tablero-view.fxml) ======*/
     @FXML private Label lblSumaMesa;
     @FXML private Label lblTurno;
     @FXML private HBox contenedorCartasJugador;
     @FXML private HBox contenedorMesa;
     @FXML private Button btnJugarCarta;
 
-    // ==========================================================================
+    /* ==========================================================================*/
 
-    // Este método lo llama el MainController al crear la escena
+    /* Este método lo llama el MainController al crear la escena*/
     public void iniciarPartida(int numBots) {
         partida = new Partida(numBots);
         actualizarVista();
         iniciarTurnos();
     }
 
-    // Actualiza lo que se ve en la ventana
+    /* Actualiza lo que se ve en la ventana*/
     private void actualizarVista() {
         lblSumaMesa.setText("Suma de la mesa: " + partida.getSumaMesa());
         lblTurno.setText("Turno de: " + partida.getJugadorActual().getNombre());
 
-        // TODO: Mostrar cartas reales del jugador en contenedorCartasJugador
-        // TODO: Mostrar cartas de la mesa en contenedorMesa
+        /* TODO: Mostrar cartas reales del jugador en contenedorCartasJugador*/
+        /* TODO: Mostrar cartas de la mesa en contenedorMesa*/
     }
 
-    // Ciclo de turnos automáticos (humano + bots)
+    /* Ciclo de turnos automáticos (humano + bots)*/
     private void iniciarTurnos() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -64,10 +64,10 @@ public class TableroController {
                     }
                 });
             }
-        }, 1000, 2000); // ejecuta cada 2 segundos
+        }, 1000, 2000); /* ejecuta cada 2 segundos*/
     }
 
-    // Evento del botón "Jugar carta" (para el jugador humano)
+    /* Evento del botón "Jugar carta" (para el jugador humano)*/
     @FXML
     private void onJugarCarta() {
         try {
@@ -78,7 +78,7 @@ public class TableroController {
         }
     }
 
-    // Cuando termina la partida
+    /* Cuando termina la partida*/
     private void mostrarPantallaFinal() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cincuentazogame/view/endgame-view.fxml"));
