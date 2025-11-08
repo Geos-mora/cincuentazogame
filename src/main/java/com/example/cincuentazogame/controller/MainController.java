@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -14,21 +15,50 @@ import java.net.URL;
 
 public class MainController {
 
+    private int numeroBots = 2; // valor por defecto si no selecciona
+    @FXML
+    private void seleccionarUnBot() {
+        numeroBots = 1;
+        System.out.println("Seleccionado 1 bot");
+    }
+
+    @FXML
+    private void seleccionarDosBots() {
+        numeroBots = 2;
+        System.out.println("Seleccionado 2 bots");
+    }
+
+    @FXML
+    private void seleccionarTresBots() {
+        numeroBots = 3;
+        System.out.println("Seleccionado 3 bots");
+    }
+
     /*esta función se encarga por medio de un onAction de mostrar la segunda interfaz del juego,
      esta segunda interfaz es el tablero donde se jugara con el número de
      bots que el usuario quiera jugar*/
     @FXML
-    private void onJugarPoker(ActionEvent e) throws Exception {
-        URL url = getClass().getResource("/com/example/cincuentazogame/view/tablero-view.fxml");
+    private void onJugarPoker(ActionEvent e) {
+        try{
+            //carga FXML del tablero
+            URL url = getClass().getResource("/com/example/cincuentazogame/view/tablero-view.fxml");
 
-        FXMLLoader loader = new FXMLLoader(url);
-        Scene tableroScene = new Scene(loader.load());
+            FXMLLoader loader = new FXMLLoader(url);
+            Parent root = loader.load();
+            //inicia la partida con el número de bots elegido
 
-        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage.setScene(tableroScene);
-        stage.setTitle("Cincuentazo - Tablero");
-        stage.show();
+            TableroController controller = loader.getController();
+            controller.iniciarPartida(numeroBots); /* numero de bots que se elijan, ejemplo 2*/
 
+
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Cincuentazo - Tablero");
+            stage.show();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
     /// ------------------------------------------------------------------------------------------------------------
@@ -40,18 +70,10 @@ public class MainController {
 
     @FXML
     public void initialize(){
-        // 🔹 Prueba rápida: crear partida con 2 jugadores máquina
-        partida = new Partida(2); // 1 humano + 2 máquinas
 
-        System.out.println("=== Inicio de la partida ===");
-        System.out.println("Carta inicial en la mesa: " + partida.getMesa().get(0));
-        System.out.println("Suma inicial de la mesa: " + partida.getSumaMesa());
-
-        System.out.println("\nJugadores y sus manos iniciales:");
-        for (Jugador j : partida.getJugadores()) {
-            System.out.println(j.getNombre() + " → " + j.getMano());
         }
-    }
+
+
 
 
 }

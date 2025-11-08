@@ -49,6 +49,13 @@ public abstract  class Jugador{
 
     //metodo abstracto para seleccionar una carta
     public abstract Carta seleccionarCarta(int sumaActualMesa);
+
+    /* Este metodo verifica si el jugador actual es una instancia de la clase JugadorMaquina
+       si lo es, devuelve true (indica que es un jugador controlado por la máquina) Si no, devuelve false (indica que es un jugador humano
+       Se usa para diferenciar entre jugadores humanos y automáticos durante la partida.*/
+    public boolean esMaquina() {
+        return this instanceof JugadorMaquina;
+    }
 }
 
 

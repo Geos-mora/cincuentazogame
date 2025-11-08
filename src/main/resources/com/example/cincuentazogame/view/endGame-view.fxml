@@ -28,8 +28,8 @@
                styleClass="title-label"/>
 
         <!--subtítulo-->
-        <Label text="Puntaje final:"
-               styleClass="subtitle-label"/>
+        <Label text="Ganador:" styleClass="subtitle-label"/>
+        styleClass="subtitle-label"/>
 
         <!--puntaje-->
         <Label fx:id="scoreLabel"

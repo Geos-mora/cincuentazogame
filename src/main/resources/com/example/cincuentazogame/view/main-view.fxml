@@ -35,10 +35,9 @@
             <VBox prefHeight="176.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
                 <Label prefHeight="125.0" prefWidth="320" text="Elige el número de bots para jugar" />
                 <HBox prefHeight="0.0" prefWidth="607.0" styleClass="containerSeleccionarBots">
-                    <!--<Button mnemonicParsing="false" text="1" />-->
-                    <Button mnemonicParsing="false" text="1" />
-                    <Button mnemonicParsing="false" text="2" />
-                    <Button mnemonicParsing="false" text="3" />
+                    <Button fx:id="btnUnBot" text="1" onAction="#seleccionarUnBot"/>
+                    <Button fx:id="btnDosBots" text="2" onAction="#seleccionarDosBots"/>
+                    <Button fx:id="btnTresBots" text="3" onAction="#seleccionarTresBots"/>
                 </HBox>
             </VBox>
         </VBox>

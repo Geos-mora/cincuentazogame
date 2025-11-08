@@ -7,6 +7,8 @@ import java.util.List;
 public class Partida{
 
     //atributos
+    private Jugador ganador;
+
     private Mazo mazo;//almacena el objeto Mazo, donde estan todas las cartas disponibles para repartir o comer
     private List<Jugador> jugadores;//lista que contiene tanto al jugador humano como a las máquinas
     private List<Carta> mesa; //lista con las cartas jugadas durante la partida, en el orden en que se jugaron
@@ -83,7 +85,73 @@ public class Partida{
     }
     //devuelve el pbjeto "mazo" para acceder desde afuera, lo que permite de robar/comer cartas
     public Mazo getMazo(){
+
         return mazo;
     }
+
+    /*
+    * METODOS QUE TENEMOS QUE LLENAR
+    * */
+
+    private int indiceJugadorActual = 0;
+    private boolean partidaTerminada = false;
+
+
+    // Devuelve el jugador actual
+    public Jugador getJugadorActual() {
+        return jugadores.get(indiceJugadorActual);
+    }
+
+    // Lógica simple para el turno del jugador humano
+    public void turnoHumano() {
+        Jugador jugador = getJugadorActual();
+        if (jugador.esMaquina()) return; // evita error si no es su turno
+        if (jugador.getMano().isEmpty()) return;
+
+        Carta carta = jugador.getMano().remove(0);
+        mesa.add(carta);
+        actualizarSumaMesa(carta.getPuntaje());
+
+        System.out.println(jugador.getNombre() + " jugó: " + carta);
+
+        avanzarTurno();
+    }
+
+    // Lógica simple para el turno de la máquina
+    public void turnoMaquina() {
+        Jugador jugador = getJugadorActual();
+        if (!jugador.esMaquina()) return;
+        if (jugador.getMano().isEmpty()) return;
+
+        Carta carta = jugador.getMano().remove(0);
+        mesa.add(carta);
+        actualizarSumaMesa(carta.getPuntaje());
+
+        System.out.println(jugador.getNombre() + " jugó: " + carta);
+
+        avanzarTurno();
+    }
+
+    // Pasa el turno al siguiente jugador
+    private void avanzarTurno() {
+        indiceJugadorActual = (indiceJugadorActual + 1) % jugadores.size();
+        if (mesa.size() >= 20) { // condición provisional de fin
+            partidaTerminada = true;
+            ganador = getJugadorActual(); // provisional
+        }
+    }
+
+    // Indica si la partida terminó
+    public boolean isPartidaTerminada() {
+        return partidaTerminada;
+    }
+
+    // Devuelve el ganador
+
+    public Jugador getGanador() {
+        return ganador;
+    }
+
+
 }
 

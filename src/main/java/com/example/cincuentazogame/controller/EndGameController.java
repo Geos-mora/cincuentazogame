@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import com.example.cincuentazogame.model.Jugador;
+
 
 public class EndGameController{
 
@@ -38,6 +40,10 @@ public class EndGameController{
         scoreLabel.setText(String.valueOf(score));
     }
 
+    public void mostrarResultado(String ganador) {
+        scoreLabel.setText("Ganador: " + ganador + " | Puntaje final: " + finalScore);
+    }
+
     @FXML
     private void onRetry(){
         //Logica para reiniciar el juego
@@ -53,4 +59,11 @@ public class EndGameController{
         stage.close();
         // MainApp.loadMenuScene();
     }
+
+    public void mostrarResultado(Jugador ganador) {
+        // aquí usas el nombre del jugador para mostrarlo en la pantalla
+        scoreLabel.setText("Ganador: " + ganador.getNombre());
+    }
+
+
 }
