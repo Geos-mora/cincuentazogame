@@ -33,6 +33,11 @@ public class Carta{
                 return Integer.parseInt(valor);
         }
     }
+    private String generarRutaImagen(String palo, String valor) {
+        // Por ejemplo: valor="A", palo="S" → "AS.png"
+        return "com/example/cincuentazogame/view/recursos/cartas" + valor + palo + ".png";
+    }
+
     /*getters - metodos publucos para obtener el valor privado de los atributos*/
     public String getPalo(){return palo;}
     public String getValor(){return valor;}

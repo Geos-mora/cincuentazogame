@@ -1,5 +1,6 @@
 package com.example.cincuentazogame.controller;
 
+import com.example.cincuentazogame.model.Carta;
 import com.example.cincuentazogame.model.Jugador;
 import com.example.cincuentazogame.model.Partida;
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +29,16 @@ public class TableroController {
     @FXML private Button btnJugarCarta;
 
     /* ==========================================================================*/
+
+
+    public void mostrarCartasJugador(List<Carta> mano){
+        contenedorCartasJugador.getChildren().clear();
+        for (Carta carta:mano){
+            String ruta="com/example/cincuentazogame/view/recursos/cartas"+ carta.getImagen();
+        }
+
+    }
+
 
     /* Este método lo llama el MainController al crear la escena*/
     public void iniciarPartida(int numBots) {

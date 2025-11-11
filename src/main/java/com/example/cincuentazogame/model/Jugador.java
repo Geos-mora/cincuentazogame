@@ -17,6 +17,7 @@ public abstract  class Jugador{
         this.eliminado=false;/*fija el estado eliminado en falso*/
     }
 
+
     /*añade una carta a la nmano del jugador*/
     public void agregarCarta(Carta carta){
         mano.add(carta);
