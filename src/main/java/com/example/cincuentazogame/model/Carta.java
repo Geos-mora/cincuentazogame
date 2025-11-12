@@ -1,53 +1,44 @@
 package com.example.cincuentazogame.model;
 
-/*definicion de la clase*/
-public class Carta{
-    /*atributos*/
-    private String palo;
-    private String valor;
-    private int puntaje;
-    private String imagen;
+public class Carta {
+    private final String palo;
+    private final String valor;
+    private final int puntaje;
+    private final String imagenFile; // ej: "2C.png"
 
-    /*contructor*/
-    public Carta(String palo,String valor){
-        this.palo=palo;
-        this.valor=valor;
-        this.puntaje=calcularPuntaje(valor);
-
-        /*asignar carta con la imagen - FALTA LOGICA AQUI para asignar imagen y mostrar*/
-        this.imagen="/com/example/cincuentazogame/view/images/"+valor+"_de_"+palo.toLowerCase()+".png";
-}
-    private int calcularPuntaje(String valor){
-        switch (valor) {
-            case "A":
-                return 1;
-            case "J":
-            case "Q":
-            case "K":
-                return -10;
-            case "9":
-                return 0;
-            case "10":
-                return 10;
-            default:
-                return Integer.parseInt(valor);
-        }
-    }
-    private String generarRutaImagen(String palo, String valor) {
-        // Por ejemplo: valor="A", palo="S" → "AS.png"
-        return "com/example/cincuentazogame/view/recursos/cartas" + valor + palo + ".png";
+    public Carta(String palo, String valor) {
+        this.palo = palo;
+        this.valor = valor;
+        this.puntaje = calcularPuntaje(valor);
+        this.imagenFile = buildImageFile(valor, palo); // no guardes la ruta completa
     }
 
-    /*getters - metodos publucos para obtener el valor privado de los atributos*/
-    public String getPalo(){return palo;}
-    public String getValor(){return valor;}
-    public int getPuntaje(){return puntaje;}
-    public String getImagen(){return imagen;}
+    private int calcularPuntaje(String v) {
+        return switch (v) {
+            case "A" -> 1;
+            case "J", "Q", "K" -> -10;
+            case "9" -> 0;
+            case "10" -> 10;
+            default -> Integer.parseInt(v);
+        };
+    }
+
+    private String buildImageFile(String valor, String palo) {
+        String suit = switch (palo) {
+            case "Corazones" -> "H";
+            case "Diamantes" -> "D";
+            case "Tréboles"  -> "C";
+            case "Picas"     -> "S";
+            default -> throw new IllegalArgumentException("Palo inválido: " + palo);
+        };
+        return valor + suit + ".png";
+    }
+
+    public String getPalo()      { return palo; }
+    public String getValor()     { return valor; }
+    public int getPuntaje()      { return puntaje; }
+    public String getImagenFile(){ return imagenFile; } // <- nombre de archivo
 
     @Override
-    /*punto validador para validar funcinamiento de la carta en consola*/
-    public String toString(){
-        return valor+" de "+palo+" (" +puntaje+ ")";
-    }
+    public String toString() { return valor + " de " + palo + " (" + puntaje + ")"; }
 }
-

@@ -7,6 +7,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,10 +16,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class TableroController {
+    private static final String BASE_IMG = "/com/example/cincuentazogame/view/recursos/cartas/";
 
     private Partida partida;
 
@@ -31,13 +35,20 @@ public class TableroController {
     /* ==========================================================================*/
 
 
+
     public void mostrarCartasJugador(List<Carta> mano){
         contenedorCartasJugador.getChildren().clear();
-        for (Carta carta:mano){
-            String ruta="com/example/cincuentazogame/view/recursos/cartas"+ carta.getImagen();
+        for (Carta carta : mano) {
+            String ruta = BASE_IMG + carta.getImagenFile();
+            ImageView vista = new ImageView(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream(ruta))
+            ));
+            vista.setFitWidth(100);
+            vista.setPreserveRatio(true);
+            contenedorCartasJugador.getChildren().add(vista);
         }
-
     }
+
 
 
     /* Este método lo llama el MainController al crear la escena*/
@@ -51,10 +62,9 @@ public class TableroController {
     private void actualizarVista() {
         lblSumaMesa.setText("Suma de la mesa: " + partida.getSumaMesa());
         lblTurno.setText("Turno de: " + partida.getJugadorActual().getNombre());
-
-        /* TODO: Mostrar cartas reales del jugador en contenedorCartasJugador*/
-        /* TODO: Mostrar cartas de la mesa en contenedorMesa*/
+        mostrarCartasJugador(partida.getJugadorHumano().getMano());
     }
+
 
     /* Ciclo de turnos automáticos (humano + bots)*/
     private void iniciarTurnos() {
