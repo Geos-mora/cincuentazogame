@@ -49,6 +49,9 @@ public class MainController{
 
             TableroController controller=loader.getController();
             controller.iniciarPartida(numeroBots); /* numero de bots que se elijan, ejemplo 2*/
+            controller.mostrarBots(numeroBots);
+
+
 
 
             Stage stage=(Stage) ((Node) e.getSource()).getScene().getWindow();

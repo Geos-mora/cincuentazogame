@@ -1,10 +1,10 @@
 .contenedorHead{
-    -fx-border-color:red;
+    -fx-border-color:black;
     -fx-alignment:center;
     -fx-padding:10;
 }
 .contenedorBody{
-    -fx-border-color:blue;
+    -fx-border-color:black;
     -fx-alignment:center;
     -fx-padding:10;
 }
@@ -16,8 +16,6 @@
 }
 
 .cartasJugador{
-      -fx-border-color:red;
-}
-.cartasBots{
-      -fx-border-color:red;
+      -fx-background-color:#FCDCDC;
+      -fx-padding:10;
 }

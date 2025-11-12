@@ -31,9 +31,34 @@ public class TableroController {
     @FXML private HBox contenedorCartasJugador;
     @FXML private HBox contenedorMesa;
     @FXML private Button btnJugarCarta;
+    @FXML private ImageView imgBot1;
+    @FXML private ImageView imgBot2;
+    @FXML private ImageView imgBot3;
+
 
     /* ==========================================================================*/
 
+    public void mostrarBots(int numBots) {
+        imgBot1.setVisible(false);
+        imgBot2.setVisible(false);
+        imgBot3.setVisible(false);
+
+        String ruta = BASE_IMG + "back.png";
+        Image back = new Image(Objects.requireNonNull(getClass().getResourceAsStream(ruta)));
+
+        if (numBots>=1) {
+            imgBot1.setImage(back);
+            imgBot1.setVisible(true);
+        }
+        if (numBots>=2) {
+            imgBot2.setImage(back);
+            imgBot2.setVisible(true);
+        }
+        if (numBots>=3) {
+            imgBot3.setImage(back);
+            imgBot3.setVisible(true);
+        }
+    }
 
 
     public void mostrarCartasJugador(List<Carta> mano){
@@ -49,6 +74,24 @@ public class TableroController {
         }
     }
 
+    private void mostrarCartaMesa(List<Carta> mesa) {
+        contenedorMesa.getChildren().clear();
+
+        if (mesa.isEmpty()) return;
+
+        Carta ultima = mesa.get(mesa.size() - 1); // última jugada
+        String ruta = BASE_IMG + ultima.getImagenFile();
+
+        ImageView vista = new ImageView(
+                new Image(Objects.requireNonNull(getClass().getResourceAsStream(ruta)))
+        );
+        vista.setFitWidth(100);
+        vista.setPreserveRatio(true);
+
+        contenedorMesa.getChildren().add(vista);
+    }
+
+
 
 
     /* Este método lo llama el MainController al crear la escena*/
@@ -62,8 +105,14 @@ public class TableroController {
     private void actualizarVista() {
         lblSumaMesa.setText("Suma de la mesa: " + partida.getSumaMesa());
         lblTurno.setText("Turno de: " + partida.getJugadorActual().getNombre());
+
+        // Mano del jugador humano
         mostrarCartasJugador(partida.getJugadorHumano().getMano());
+
+        // Carta en la mesa
+        mostrarCartaMesa(partida.getCartasMesa());
     }
+
 
 
     /* Ciclo de turnos automáticos (humano + bots)*/

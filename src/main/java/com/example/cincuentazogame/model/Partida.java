@@ -24,8 +24,8 @@ public class Partida {
         this.mesa=new ArrayList<>();
 
         jugadores.add(new JugadorHumano("Jugador"));
-        for (int i=1; i <= cantidadJugadoresMaquina; i++) {
-            jugadores.add(new JugadorMaquina("Máquina " + i));
+        for (int i=1; i <=cantidadJugadoresMaquina; i++) {
+            jugadores.add(new JugadorMaquina("Máquina "+i));
         }
 
         prepararPartida();
@@ -35,7 +35,7 @@ public class Partida {
     private void prepararPartida() {
         /* Repartir 4 cartas a cada jugador*/
         for (Jugador jugador : jugadores) {
-            for (int i=0; i < 4; i++) {
+            for (int i=0; i <4; i++) {
                 try {
                     jugador.agregarCarta(mazo.tomarCarta());
                 } catch (MazoVacioException e) {
@@ -49,9 +49,10 @@ public class Partida {
         try {
             Carta cartaInicial=mazo.tomarCarta();
             mesa.add(cartaInicial);
-            sumaMesa=cartaInicial.getPuntaje();
+            sumaMesa=cartaInicial.obtenerValor(0);
             System.out.println("Carta inicial: " + cartaInicial);
             System.out.println("Suma inicial de la mesa: " + sumaMesa);
+
         } catch (MazoVacioException e) {
             System.out.println("Mazo vacío al iniciar la mesa.");
         }
@@ -78,10 +79,14 @@ public class Partida {
 
     private void jugarCarta(Jugador j, Carta c) {
         mesa.add(c);
-        actualizarSumaMesa(c.getPuntaje());
-        System.out.println(j.getNombre() + " jugó: " + c);
-        /* Aquí puedes validar reglas específicas antes/después de sumar.*/
+        int valorCarta=c.obtenerValor(sumaMesa);
+        sumaMesa += valorCarta;
+
+        System.out.println(j.getNombre() + " jugó: " + c +
+                " => " + (valorCarta >= 0 ? "+" : "") + valorCarta +
+                " (suma=" + sumaMesa + ")");
     }
+
 
     private void avanzarTurno() {
         indiceJugadorActual=(indiceJugadorActual + 1) % jugadores.size();
@@ -109,7 +114,6 @@ public class Partida {
 
     public int getSumaMesa() { return sumaMesa; }
 
-    public void actualizarSumaMesa(int cambio) { sumaMesa += cambio; }
 
     public Mazo getMazo() { return mazo; }
 

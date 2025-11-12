@@ -9,19 +9,21 @@ public class Carta {
     public Carta(String palo, String valor) {
         this.palo = palo;
         this.valor = valor;
-        this.puntaje = calcularPuntaje(valor);
-        this.imagenFile = buildImageFile(valor, palo); // no guardes la ruta completa
+        this.puntaje = 0;
+        this.imagenFile = buildImageFile(valor, palo);
     }
 
-    private int calcularPuntaje(String v) {
-        return switch (v) {
-            case "A" -> 1;
-            case "J", "Q", "K" -> -10;
-            case "9" -> 0;
-            case "10" -> 10;
-            default -> Integer.parseInt(v);
-        };
+    public int obtenerValor(int sumaActualMesa) {
+        if ("A".equals(valor)) {
+            return (sumaActualMesa + 10 <= 50) ? 10 : 1;
+        }
+        if ("9".equals(valor))  return 0;
+        if ("10".equals(valor)) return 10;
+        if ("J".equals(valor) || "Q".equals(valor) || "K".equals(valor)) return -10;
+        return Integer.parseInt(valor); // 2–8
     }
+
+
 
     private String buildImageFile(String valor, String palo) {
         String suit = switch (palo) {
