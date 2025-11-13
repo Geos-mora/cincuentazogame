@@ -77,6 +77,8 @@ public class Partida {
         boolean ok= jugarCarta(j, c);
         // aquí luego meteremos "robarCarta(j)" cuando implementemos el robo
         if (ok) {
+            /* se llama robarCarta() ya que el jugador humano y el bot siempre debe quedar con 4 cartas si hay mazo*/
+            robarCarta(j);
             avanzarTurno();
         }
     }
@@ -100,6 +102,8 @@ public class Partida {
         boolean ok = jugarCarta(j, c);
         //  irá "robarCarta(j)"
         if (ok) {
+
+            robarCarta(j);
             avanzarTurno();
         }
     }
@@ -169,6 +173,48 @@ public class Partida {
             System.out.println("Ganador: " + ganador.getNombre());
         }
     }
+
+    //=====================================REPONER MAZO===================000000
+    private void reponerMazoDesdeMesa() {
+       /*  Si la mesa tiene 0 o 1 carta, no hay suficientes para reponer*/
+        if (mesa.size() <= 1) {
+            return;
+        }
+        /* Cartas para devolver al mazo: todas menos la última*/
+        List<Carta> paraMazo = new ArrayList<>(mesa.subList(0,mesa.size()- 1));
+
+        /*Dejamos solo la última carta en la mesa*/
+        Carta ultima= mesa.get(mesa.size() - 1);
+        mesa.clear();
+        mesa.add(ultima);
+        /*Enviamos cartas al mazo y barajar */
+        mazo.agregarCartas(paraMazo);
+        System.out.println("Mazo repuesto desde la mesa. Cartas añadidas: " + paraMazo.size());
+    }
+
+    //==========================ROBAR CARTA =================================00
+
+    private void robarCarta(Jugador j) {
+        /*Si el mazo está vacío, intentamos reponerlo desde la mesa*/
+        if (mazo.estaVacio()) {
+            reponerMazoDesdeMesa();
+        }
+
+        // SI no hay cartas ni en mazo ni en mesa para reponer
+        if (mazo.estaVacio()) {
+            System.out.println("No hay cartas disponibles para robar.");
+            return;
+        }
+
+        try {
+            Carta nueva = mazo.tomarCarta();
+            j.agregarCarta(nueva);
+            System.out.println(j.getNombre()+" robó carta: "+nueva);
+        } catch (MazoVacioException e) {
+            System.out.println("Error: mazo vacío al intentar robar.");
+        }
+    }
+
 
 
 
