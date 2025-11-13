@@ -64,24 +64,38 @@ public class Partida {
     public boolean turnoHumano(Carta c) {
         if (partidaTerminada) return false;
 
-        Jugador j= getJugadorActual();
-        // Solo se permite si es el humano y es su turno
+        Jugador j = getJugadorActual();
         if (j.esMaquina()) return false;
         if (c == null || !j.getMano().contains(c)) return false;
 
-        /* este codigo es para saber si carta se puede jugar sin pasarse de 50*/
+        /*este codigo sirve para ver si el la mano del jugador humano tiene cartas que se puedan jugar */
+        boolean tieneJugadaValida = false;
+        for (Carta cartaEnMano : j.getMano()) {
+            if (ReglaCincuentazo.puedeJugar(sumaMesa, cartaEnMano)) {
+                tieneJugadaValida = true;
+                break;
+            }
+        }
+
+        /*este codigo me sirve para eliminar el jugador si se queda sin ninguna carta jugable */
+        if (!tieneJugadaValida) {
+            System.out.println("Jugador "+j.getNombre()+" no tiene jugadas válidas. Estas eliminado.");
+            eliminarJugadorActual();
+            return false;
+        }
+
+
+        /*en este condicional se verifica que la carta que fue clickeada es valida y si no lo es mostrar en consola que se pasaria*/
         if (!ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
             System.out.println("Carta inválida para jugar: " +c+ " (se pasaría de 50)");
             return false;
         }
 
-        /* si es valida la carte, juega la carta*/
+        /* Si la carta seleccionada es válida, se juega*/
         j.getMano().remove(c);
-        boolean ok= jugarCarta(j, c);
-        if (!ok) return false; // por seguridad
-
-        /* Roba una carta para volver a tener 4 */
-        robarCarta(j);
+        boolean ok = jugarCarta(j, c);
+        if (!ok) return false;
+        robarCarta(j);/* Roba una carta para volver a tener 4*/
 
         avanzarTurno();
         return true;
