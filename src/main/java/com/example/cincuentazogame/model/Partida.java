@@ -75,12 +75,42 @@ public class Partida {
         /* si tiene una carta jugable jugará esa carta*/
         j.getMano().remove(c);
         boolean ok= jugarCarta(j, c);
+
         // aquí luego meteremos "robarCarta(j)" cuando implementemos el robo
         if (ok) {
             /* se llama robarCarta() ya que el jugador humano y el bot siempre debe quedar con 4 cartas si hay mazo*/
             robarCarta(j);
             avanzarTurno();
         }
+    }
+
+
+
+    /* Turno del humano seleccionando una carta específica con el click*/
+    public boolean turnoHumano(Carta c) {
+        if (partidaTerminada) return false;
+
+        Jugador j= getJugadorActual();
+        // Solo se permite si es el humano y es su turno
+        if (j.esMaquina()) return false;
+        if (c == null || !j.getMano().contains(c)) return false;
+
+        /* este codigo es para saber si carta se puede jugar sin pasarse de 50*/
+        if (!ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
+            System.out.println("Carta inválida para jugar: " +c+ " (se pasaría de 50)");
+            return false;
+        }
+
+        /* si es valida la carte, juega la carta*/
+        j.getMano().remove(c);
+        boolean ok= jugarCarta(j, c);
+        if (!ok) return false; // por seguridad
+
+        /* Roba una carta para volver a tener 4 */
+        robarCarta(j);
+
+        avanzarTurno();
+        return true;
     }
 
 

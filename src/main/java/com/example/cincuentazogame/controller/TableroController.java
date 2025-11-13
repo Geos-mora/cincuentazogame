@@ -30,7 +30,6 @@ public class TableroController {
     @FXML private Label lblTurno;
     @FXML private HBox contenedorCartasJugador;
     @FXML private HBox contenedorMesa;
-    @FXML private Button btnJugarCarta;
     @FXML private ImageView imgBot1;
     @FXML private ImageView imgBot2;
     @FXML private ImageView imgBot3;
@@ -63,16 +62,45 @@ public class TableroController {
 
     public void mostrarCartasJugador(List<Carta> mano){
         contenedorCartasJugador.getChildren().clear();
+
         for (Carta carta : mano) {
             String ruta = BASE_IMG + carta.getImagenFile();
-            ImageView vista = new ImageView(new Image(
-                    Objects.requireNonNull(getClass().getResourceAsStream(ruta))
-            ));
+
+            ImageView vista =new ImageView(
+                    new Image(Objects.requireNonNull(getClass().getResourceAsStream(ruta)))
+            );
             vista.setFitWidth(100);
             vista.setPreserveRatio(true);
+
+            //----------estilos de hover------
+            vista.setOnMouseEntered(e -> {
+                vista.setScaleX(1.2);
+                vista.setScaleY(1.2);
+                vista.setStyle("-fx-effect: dropshadow(gaussian, black, 20, 0.5, 0, 0);");
+            });
+            vista.setOnMouseExited(e -> {
+                vista.setScaleX(1.0);
+                vista.setScaleY(1.0);
+                vista.setStyle("");
+            });
+            //---------------------------------
+
+
+            /* Handler dek click para jugar la carta*/
+            vista.setOnMouseClicked(event -> {
+                if (partida == null || partida.isPartidaTerminada()) return;
+
+                boolean ok=partida.turnoHumano(carta);
+                if (!ok) {
+                    System.out.println("No se pudo jugar la carta seleccionada.");
+                    return;
+                }
+                actualizarVista();
+            });
             contenedorCartasJugador.getChildren().add(vista);
         }
     }
+
 
     private void mostrarCartaMesa(List<Carta> mesa) {
         contenedorMesa.getChildren().clear();
@@ -139,15 +167,6 @@ public class TableroController {
     }
 
     /* Evento del botón "Jugar carta" (para el jugador humano)*/
-    @FXML
-    private void onJugarCarta() {
-        try {
-            partida.turnoHumano();
-            actualizarVista();
-        } catch (Exception e) {
-            System.out.println("Error al jugar carta: " + e.getMessage());
-        }
-    }
 
     /* Cuando termina la partida*/
     private void mostrarPantallaFinal() {
