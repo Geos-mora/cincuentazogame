@@ -60,46 +60,136 @@ public class Partida {
 
     /* --- Turnos ---*/
     public void turnoHumano() {
-        Jugador j=getJugadorActual();
-        if (j.esMaquina() ||j.getMano().isEmpty()) return;
-        /* Temporal: juega la primera carta. Luego se integra selección por UI.*/
-        Carta c=j.getMano().remove(0);
-        jugarCarta(j, c);
-        avanzarTurno();
-    }
+        if (partidaTerminada) return;
+        /*  si no es el turno del humano simplemnete retorna*/
+        Jugador j = getJugadorActual();
+        if (j.esMaquina()) return;
 
-    public void turnoMaquina() {
-        Jugador j=getJugadorActual();
-        if (!j.esMaquina() ||j.getMano().isEmpty()) return;
-        /* Temporal: juega la primera carta. Luego integra estrategia.*/
-        Carta c=j.getMano().remove(0);
-        jugarCarta(j, c);
-        avanzarTurno();
-    }
+        /* para saber siu el jugador humano iiene alguna carta jugable, si no la tiene, será elinado*/
+        Carta c = elegirCartaJugable(j);
+        if (c ==null) {
+            eliminarJugadorActual();
+            return;
+        }
 
-    private void jugarCarta(Jugador j, Carta c) {
-        mesa.add(c);
-        int valorCarta=c.obtenerValor(sumaMesa);
-        sumaMesa += valorCarta;
-
-        System.out.println(j.getNombre() + " jugó: " + c +
-                " => " + (valorCarta >= 0 ? "+" : "") + valorCarta +
-                " (suma=" + sumaMesa + ")");
-    }
-
-
-    private void avanzarTurno() {
-        indiceJugadorActual=(indiceJugadorActual + 1) % jugadores.size();
-        if (condicionFin()) {
-            partidaTerminada=true;
-            ganador=getJugadorActual();
+        /* si tiene una carta jugable jugará esa carta*/
+        j.getMano().remove(c);
+        boolean ok= jugarCarta(j, c);
+        // aquí luego meteremos "robarCarta(j)" cuando implementemos el robo
+        if (ok) {
+            avanzarTurno();
         }
     }
 
-    private boolean condicionFin() {
-        /* Placeholder: finaliza cuando hay 20 cartas en la mesa.*/
-        return mesa.size() >= 20;
+
+    public void turnoMaquina() {
+        if (partidaTerminada) return;
+        /*  si no es el turno del bot simplemnete retorna*/
+        Jugador j = getJugadorActual();
+        if (!j.esMaquina()) return;
+
+        /* para saber si el bot tiene alguna carta jugable, si no la tiene, será elinado*/
+        Carta c = elegirCartaJugable(j);
+        if (c == null) {
+            eliminarJugadorActual();
+            return;
+        }
+
+        /* aqui es lo mismo, si tiene una carta jugable jugará esa carta*/
+        j.getMano().remove(c);
+        boolean ok = jugarCarta(j, c);
+        //  irá "robarCarta(j)"
+        if (ok) {
+            avanzarTurno();
+        }
     }
+
+
+    private boolean jugarCarta(Jugador j, Carta c) {
+        /* Aqui si la carta hace pasar de 50, NO se juega vuelve y se recalcula para hacer una jugada válida*/
+        if (!ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
+            System.out.println("Jugada inválida de " + j.getNombre() + " con " + c);
+            return false;
+        }
+
+        mesa.add(c);
+        sumaMesa = ReglaCincuentazo.calcularNuevaSuma(sumaMesa, c);
+
+        System.out.println(j.getNombre() + " jugó: " + c +
+                " (suma=" + sumaMesa + ")");
+        return true;
+    }
+
+    /* esta funcion me permite jugar la  primera carta que no pasa de 50, si no hay cartas jugables, inmediatamente retornará null
+      ya que no  tendra una jugada valida */
+
+    private Carta elegirCartaJugable(Jugador j) {
+        for (Carta c : j.getMano()) {
+            if (ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
+                return c;
+             }
+       }
+        return null;
+    }
+
+    //=============================ELIMINAR JUGADOR=============================
+
+    /*esta funcion me érmiter eliminar un jugador cuando ya se queda sin jugada validad asi hasta quedar un solo jugador quien sera
+     el ganador de la partida */
+
+    private void eliminarJugadorActual() {
+        Jugador j = getJugadorActual();
+        j.eliminarJugador();
+
+        /* Las cartas van al mazo y se barajan  */
+        if (!j.getMano().isEmpty()) {
+            mazo.agregarCartas(new ArrayList<>(j.getMano()));
+            j.getMano().clear();
+        }
+        System.out.println("Jugador eliminado: " + j.getNombre());
+
+        /* codigo para eliminar de la lista de jugadores*/
+        jugadores.remove(indiceJugadorActual);
+
+        // Ajustar índice de turno
+        if (jugadores.isEmpty()) {
+            partidaTerminada= true;
+            ganador= null;
+            return;
+        }
+
+        if (indiceJugadorActual>= jugadores.size()) {
+            indiceJugadorActual= 0;
+        }
+
+        /*ya si solo queda un solo jugador, sera el ganador*/
+        if (jugadores.size() == 1) {
+            partidaTerminada = true;
+            ganador = jugadores.get(0);
+            System.out.println("Ganador: " + ganador.getNombre());
+        }
+    }
+
+
+
+
+    private void avanzarTurno() {
+        if (partidaTerminada) return;
+
+        indiceJugadorActual=(indiceJugadorActual +1) % jugadores.size();
+
+        if (condicionFin()) {
+            partidaTerminada =true;
+            ganador= jugadores.get(0);
+            System.out.println("Ganador: "+ ganador.getNombre());
+        }
+    }
+
+
+    private boolean condicionFin() {
+        return jugadores.size() == 1;
+    }
+
 
     /* --- Getters y utilidades para la vista ---*/
     public Jugador getJugadorActual() { return jugadores.get(indiceJugadorActual); }
