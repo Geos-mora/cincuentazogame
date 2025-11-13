@@ -59,32 +59,6 @@ public class Partida {
     }
 
     /* --- Turnos ---*/
-    public void turnoHumano() {
-        if (partidaTerminada) return;
-        /*  si no es el turno del humano simplemnete retorna*/
-        Jugador j = getJugadorActual();
-        if (j.esMaquina()) return;
-
-        /* para saber siu el jugador humano iiene alguna carta jugable, si no la tiene, será elinado*/
-        Carta c = elegirCartaJugable(j);
-        if (c ==null) {
-            eliminarJugadorActual();
-            return;
-        }
-
-        /* si tiene una carta jugable jugará esa carta*/
-        j.getMano().remove(c);
-        boolean ok= jugarCarta(j, c);
-
-        // aquí luego meteremos "robarCarta(j)" cuando implementemos el robo
-        if (ok) {
-            /* se llama robarCarta() ya que el jugador humano y el bot siempre debe quedar con 4 cartas si hay mazo*/
-            robarCarta(j);
-            avanzarTurno();
-        }
-    }
-
-
 
     /* Turno del humano seleccionando una carta específica con el click*/
     public boolean turnoHumano(Carta c) {
@@ -121,7 +95,7 @@ public class Partida {
         if (!j.esMaquina()) return;
 
         /* para saber si el bot tiene alguna carta jugable, si no la tiene, será elinado*/
-        Carta c = elegirCartaJugable(j);
+        Carta c = j.seleccionarCarta(sumaMesa);
         if (c == null) {
             eliminarJugadorActual();
             return;
@@ -137,6 +111,7 @@ public class Partida {
             avanzarTurno();
         }
     }
+
 
 
     private boolean jugarCarta(Jugador j, Carta c) {

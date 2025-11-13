@@ -1,4 +1,7 @@
 package com.example.cincuentazogame.model;
 
-public class EstrategiaSeleccionCarta {
+import java.util.List;
+
+public interface EstrategiaSeleccionCarta {
+    Carta seleccionarCarta(List<Carta> mano, int sumaMesa);
 }
