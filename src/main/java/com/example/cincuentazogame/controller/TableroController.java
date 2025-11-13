@@ -76,7 +76,8 @@ public class TableroController {
             vista.setOnMouseEntered(e -> {
                 vista.setScaleX(1.2);
                 vista.setScaleY(1.2);
-                vista.setStyle("-fx-effect: dropshadow(gaussian, black, 20, 0.5, 0, 0);");
+                vista.setStyle("-fx-effect: dropshadow(gaussian, red, 20, 0.5, 0, 0);");
+
             });
             vista.setOnMouseExited(e -> {
                 vista.setScaleX(1.0);
@@ -115,6 +116,19 @@ public class TableroController {
         );
         vista.setFitWidth(100);
         vista.setPreserveRatio(true);
+
+        vista.setOnMouseEntered(e -> {
+            vista.setScaleX(1.2);
+            vista.setScaleY(1.2);
+            vista.setStyle("-fx-effect: dropshadow(gaussian, black, 20, 0.5, 0, 0);");
+
+        });
+        vista.setOnMouseExited(e -> {
+            vista.setScaleX(1.0);
+            vista.setScaleY(1.0);
+            vista.setStyle("");
+        });
+
 
         contenedorMesa.getChildren().add(vista);
     }
