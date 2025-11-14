@@ -45,10 +45,10 @@ public class MainController{
 
             FXMLLoader loader=new FXMLLoader(url);
             Parent root=loader.load();
-            /*inicia la partida con el número de bots elegido*/
+            /*inicia la partida con el numero de bots elegido*/
 
             TableroController controller=loader.getController();
-            controller.iniciarPartida(numeroBots); /* numero de bots que se elijan, ejemplo 2*/
+            controller.iniciarPartida(numeroBots); /* numero de bots que se elijan*/
             controller.mostrarBots(numeroBots);
 
 

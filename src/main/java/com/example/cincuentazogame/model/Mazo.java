@@ -4,9 +4,9 @@ import com.example.cincuentazogame.model.excepciones.MazoVacioException;
 import java.util.*;
 
 public class Mazo {
-        /*lista privada de castas*/
+        /*lista privada de cartas*/
         private List<Carta> cartas;
-        /*areglo estaticos de tipo string para definir los palos*/
+        /*arreglo estatico de tipo string para definir los palos*/
         private static final String[] PALOS = {"Corazones", "Diamantes", "Tréboles", "Picas"};
         /*arreglo estatico de tipo string para definir los valores*/
         private static final String[] VALORES = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
