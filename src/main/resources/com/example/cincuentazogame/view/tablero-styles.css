@@ -19,12 +19,21 @@
       -fx-padding:10;
 }
 .contenedorLabel2{
-    -fx-alignment:CENTER_LEFT;
+    -fx-alignment:TOP_LEFT;
 
 }
 .contenedorLabel2 > Label{
   -fx-font-weight: bold;
-  -fx-padding:0 0 15 15;
+  -fx-padding:15 0 15 15;
 
 }
 
+.containerJugadoresEliminados{
+    -fx-alignment:TOP_LEFT;
+      -fx-font-weight: bold;
+      -fx-padding:0 0 15 15;
+}
+.containerJugadoresEliminados > Label{
+    -fx-text-fill: red;
+
+}

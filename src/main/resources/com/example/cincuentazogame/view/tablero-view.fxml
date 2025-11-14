@@ -19,16 +19,17 @@
         </HBox>
       <HBox prefHeight="120.0" prefWidth="652.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="contenedorLabel2">
+            <VBox prefHeight="120.0" prefWidth="228.0" styleClass="contenedorLabel2">
                <children>
                   <Label fx:id="lblTimer" text="Tiempo: 00:35" />
+                  <VBox fx:id="contenedorEliminados" prefHeight="87.0" prefWidth="166.0" styleClass="containerJugadoresEliminados" />
                </children>
-            </HBox>
+            </VBox>
       
               <!-- mesa y suma -->
-              <VBox alignment="CENTER" prefHeight="100.0" prefWidth="273.0" spacing="10" styleClass="contenedorBody">
+              <VBox alignment="CENTER" prefHeight="120.0" prefWidth="275.0" spacing="10" styleClass="contenedorBody">
                   <children>
-                      <HBox fx:id="contenedorMesa" alignment="CENTER" prefHeight="78.0" prefWidth="259.0" spacing="10" styleClass="mesaCartas" />
+                      <HBox fx:id="contenedorMesa" alignment="CENTER" prefHeight="78.0" prefWidth="200.0" spacing="10" styleClass="mesaCartas" />
                   </children>
               </VBox>
             <VBox prefHeight="100.0" prefWidth="181.0" styleClass="contenedorLabel2">

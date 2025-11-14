@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,8 @@ import java.util.TimerTask;
 
 public class TableroController {
     private static final String BASE_IMG="/com/example/cincuentazogame/view/recursos/cartas/";
+    private final java.util.List<String> eliminadosMostrados = new java.util.ArrayList<>();
+
 
     private Partida partida;
     private Thread hiloCronometro;
@@ -34,6 +37,7 @@ public class TableroController {
     @FXML private Label lblTurno;
     @FXML private HBox contenedorCartasJugador;
     @FXML private HBox contenedorMesa;
+    @FXML private VBox contenedorEliminados;
     @FXML private ImageView imgBot1;
     @FXML private ImageView imgBot2;
     @FXML private ImageView imgBot3;
@@ -110,6 +114,33 @@ public class TableroController {
             imgBot3.setVisible(true);
         }
     }
+
+    /*esta funcion me sirve para eliminar la carta de reverso  que representa a cada bot */
+    private void actualizarBotsDesdePartida() {
+        if (partida == null) return;
+
+        // Máquinas se crearon como "Máquina 1", "Máquina 2", "Máquina 3"
+        boolean bot1Vivo = partida.existeJugadorConNombre("Bot 1");
+        boolean bot2Vivo = partida.existeJugadorConNombre("Bot 2");
+        boolean bot3Vivo = partida.existeJugadorConNombre("Bot 3");
+
+        if (imgBot1 != null) imgBot1.setVisible(bot1Vivo);
+        if (imgBot2 != null) imgBot2.setVisible(bot2Vivo);
+        if (imgBot3 != null) imgBot3.setVisible(bot3Vivo);
+    }
+    /*esta funcion me permite actualizar la interfaz con los jugadores eliminados durante la partida */
+    private void actualizarEliminaciones() {
+        if (partida == null || contenedorEliminados == null) return;
+
+        for (String nombre :partida.getHistorialEliminados()) {
+            if (eliminadosMostrados.contains(nombre)) continue;
+
+            eliminadosMostrados.add(nombre);
+            Label lbl = new Label("eliminado: "+nombre);
+            contenedorEliminados.getChildren().add(lbl);
+        }
+    }
+
 
 
     public void mostrarCartasJugador(List<Carta> mano){
@@ -206,6 +237,8 @@ public class TableroController {
 
         // Carta en la mesa
         mostrarCartaMesa(partida.getCartasMesa());
+        actualizarBotsDesdePartida();   /*mostrar y ocultar las cartas que estan en reversos que representan a cada bot */
+        actualizarEliminaciones(); /*actualiza los jugadores eliminados */
     }
 
 

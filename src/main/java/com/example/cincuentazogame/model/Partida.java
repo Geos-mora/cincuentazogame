@@ -7,6 +7,7 @@ import java.util.List;
 public class Partida {
 
     /* Estado principal*/
+
     private final Mazo mazo;
     private final List<Jugador> jugadores;
     private final List<Carta> mesa;
@@ -16,8 +17,9 @@ public class Partida {
     private int indiceJugadorActual=0;
     private boolean partidaTerminada=false;
     private Jugador ganador;
-
+    private final List<String> historialEliminados = new ArrayList<>();
     /* --- Construcción ---*/
+
     public Partida(int cantidadJugadoresMaquina) {
         this.mazo=new Mazo();
         this.jugadores=new ArrayList<>();
@@ -27,7 +29,7 @@ public class Partida {
         jugadores.add(new JugadorHumano("Jugador"));
         for (int i=1; i <=cantidadJugadoresMaquina; i++) {
             jugadores.add(new JugadorMaquina("Máquina "+i));
-        }*/
+       }*/
 
         /*para usaer el patron de creacion factory method*/
         jugadores.add(JugadorFactory.crearJugador("humano", "Jugador"));
@@ -56,8 +58,7 @@ public class Partida {
                     System.out.println("No hay suficientes cartas para repartir.");
                     return;
                 }
-            }
-        }
+            }}
 
         /* Carta inicial a la mesa*/
         try {
@@ -66,7 +67,6 @@ public class Partida {
             sumaMesa=cartaInicial.obtenerValor(0);
             System.out.println("Carta inicial: " + cartaInicial);
             System.out.println("Suma inicial de la mesa: " + sumaMesa);
-
         } catch (MazoVacioException e) {
             System.out.println("Mazo vacío al iniciar la mesa.");
         }
@@ -164,8 +164,9 @@ public class Partida {
         for (Carta c : j.getMano()) {
             if (ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
                 return c;
-             }
-       }
+
+            }
+        }
         return null;
     }
 
@@ -177,6 +178,9 @@ public class Partida {
     private void eliminarJugadorActual() {
         Jugador j = getJugadorActual();
         j.eliminarJugador();
+
+        /* guardaremos aqui  el historial de eliminados para luego mostrar en la interfaz*/
+        historialEliminados.add(j.getNombre());
 
         /* Las cartas van al mazo y se barajan  */
         if (!j.getMano().isEmpty()) {
@@ -206,6 +210,16 @@ public class Partida {
             System.out.println("Ganador: " + ganador.getNombre());
         }
     }
+    public boolean existeJugadorConNombre(String nombre) {
+        for (Jugador j : jugadores) {
+            if (j.getNombre().equals(nombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     /*=====================================REPONER MAZO===================*/
     private void reponerMazoDesdeMesa() {
@@ -265,28 +279,27 @@ public class Partida {
     }
 
 
-    private boolean condicionFin() {
-        return jugadores.size() == 1;
-    }
+    private boolean condicionFin() {return jugadores.size() == 1;}
 
 
     /* --- Getters y utilidades para la vista ---*/
-    public Jugador getJugadorActual() { return jugadores.get(indiceJugadorActual); }
+    public Jugador getJugadorActual() { return jugadores.get(indiceJugadorActual);}
 
-    public Jugador getJugadorHumano() { return jugadores.get(0); }
+    public Jugador getJugadorHumano() { return jugadores.get(0);}
 
-    public List<Jugador> getJugadores() { return jugadores; }
+    public List<Jugador> getJugadores() { return jugadores;}
+    public List<String> getHistorialEliminados() {return historialEliminados;}
 
-    public List<Carta> getCartasMesa() { return mesa; }
+    public List<Carta> getCartasMesa() { return mesa;}
 
-    public List<Carta> getMesa() { return mesa; } /* si tienes código que ya usa este nombre*/
+    public List<Carta> getMesa() { return mesa;} /* si tienes código que ya usa este nombre*/
 
-    public int getSumaMesa() { return sumaMesa; }
+    public int getSumaMesa() { return sumaMesa;}
 
 
-    public Mazo getMazo() { return mazo; }
+    public Mazo getMazo() { return mazo;}
 
-    public boolean isPartidaTerminada() { return partidaTerminada; }
+    public boolean isPartidaTerminada() { return partidaTerminada;}
 
-    public Jugador getGanador() { return ganador; }
+    public Jugador getGanador() { return ganador;}
 }
