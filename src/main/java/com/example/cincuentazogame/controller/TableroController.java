@@ -193,7 +193,7 @@ public class TableroController {
     * (sea que se pierda o gane)*/
     private void mostrarAlertFin(){
         /*mensaje del alertbox*/
-        String mensaje="Juego terminado, gano: " + partida.getGanador().getNombre() + "\n\n deseas volver al menu? principal?";
+        String mensaje="Juego terminado, gano: " + partida.getGanador().getNombre() + "\n\n deseas volver al menu principal?";
         javafx.scene.control.Alert alert=new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
         alert.setTitle("fin de la partida");
         alert.setHeaderText("resultado:");
