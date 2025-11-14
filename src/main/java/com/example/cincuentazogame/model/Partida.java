@@ -1,8 +1,11 @@
 package com.example.cincuentazogame.model;
-
 import com.example.cincuentazogame.model.excepciones.MazoVacioException;
+import com.example.cincuentazogame.model.excepciones.JugadaInvalidaException;
+import com.example.cincuentazogame.model.excepciones.CartaNoEncontradaException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Partida {
 
@@ -17,7 +20,7 @@ public class Partida {
     private int indiceJugadorActual=0;
     private boolean partidaTerminada=false;
     private Jugador ganador;
-    private final List<String> historialEliminados = new ArrayList<>();
+    private final List<String> historialEliminados=new ArrayList<>();
     /* --- Construcción ---*/
 
     public Partida(int cantidadJugadoresMaquina) {
@@ -65,8 +68,8 @@ public class Partida {
             Carta cartaInicial=mazo.tomarCarta();
             mesa.add(cartaInicial);
             sumaMesa=cartaInicial.obtenerValor(0);
-            System.out.println("Carta inicial: " + cartaInicial);
-            System.out.println("Suma inicial de la mesa: " + sumaMesa);
+            System.out.println("Carta inicial: "+cartaInicial);
+            System.out.println("Suma inicial de la mesa: "+sumaMesa);
         } catch (MazoVacioException e) {
             System.out.println("Mazo vacío al iniciar la mesa.");
         }
@@ -78,84 +81,94 @@ public class Partida {
     public boolean turnoHumano(Carta c) {
         if (partidaTerminada) return false;
 
-        Jugador j = getJugadorActual();
+        Jugador j=getJugadorActual();
         if (j.esMaquina()) return false;
-        if (c == null || !j.getMano().contains(c)) return false;
+        if (c == null) return false;
 
-        /*este codigo sirve para ver si el la mano del jugador humano tiene cartas que se puedan jugar */
-        boolean tieneJugadaValida = false;
-        for (Carta cartaEnMano : j.getMano()) {
-            if (ReglaCincuentazo.puedeJugar(sumaMesa, cartaEnMano)) {
-                tieneJugadaValida = true;
+        /* Si la carta no está en la mano se lanza la excepcion*/
+        if (!j.getMano().contains(c)) {
+            throw new CartaNoEncontradaException(
+                    "La carta seleccionada no está en la mano del jugador."
+            );
+        }
+
+        /* Verificar si el jugador almenos tiene una carta que sea válida*/
+        boolean tieneJugadaValida=false;
+        for (Carta carta : j.getMano()) {
+            if (ReglaCincuentazo.puedeJugar(sumaMesa, carta)) {
+                tieneJugadaValida=true;
                 break;
             }
         }
-
-        /*este codigo me sirve para eliminar el jugador si se queda sin ninguna carta jugable */
+        /*aqui eliminamos eel jugador si no tiene jugadas validas */
         if (!tieneJugadaValida) {
-            System.out.println("Jugador "+j.getNombre()+" no tiene jugadas válidas. Estas eliminado.");
+            System.out.println("Jugador "+j.getNombre()+" no tiene jugadas válidas. Eliminado.");
             eliminarJugadorActual();
             return false;
         }
 
+        /*Intentar jugar la carta seleccionada*/
+        try {
+            j.getMano().remove(c);
+            jugarCarta(j, c);
+            robarCarta(j);
+            avanzarTurno();
+            return true;
 
-        /*en este condicional se verifica que la carta que fue clickeada es valida y si no lo es mostrar en consola que se pasaria*/
-        if (!ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
-            System.out.println("Carta inválida para jugar: " +c+ " (se pasaría de 50)");
+        } catch (JugadaInvalidaException e) {
+            System.out.println("[JUGADA INVÁLIDA] "+e.getMessage());
+            j.agregarCarta(c);     /* devolvemos la carta a la mano*/
             return false;
         }
-
-        /* Si la carta seleccionada es válida, se juega*/
-        j.getMano().remove(c);
-        boolean ok = jugarCarta(j, c);
-        if (!ok) return false;
-        robarCarta(j);/* Roba una carta para volver a tener 4*/
-
-        avanzarTurno();
-        return true;
     }
+
 
 
     public void turnoMaquina() {
         if (partidaTerminada) return;
-        /*  si no es el turno del bot simplemnete retorna*/
-        Jugador j = getJugadorActual();
+
+        Jugador j=getJugadorActual();
         if (!j.esMaquina()) return;
 
-        /* para saber si el bot tiene alguna carta jugable, si no la tiene, será elinado*/
-        Carta c = j.seleccionarCarta(sumaMesa);
-        if (c == null) {
+        /*  el bot aqui selecciona con estrategia*/
+        Carta c=j.seleccionarCarta(sumaMesa);
+
+        if (c==null) {
+            System.out.println("Máquina sin jugadas válidas. Eliminada: " + j.getNombre());
             eliminarJugadorActual();
             return;
         }
 
-        /* aqui es lo mismo, si tiene una carta jugable jugará esa carta*/
-        j.getMano().remove(c);
-        boolean ok = jugarCarta(j, c);
-        //  irá "robarCarta(j)"
-        if (ok) {
-
+        try {
+            j.getMano().remove(c);
+            jugarCarta(j, c);
             robarCarta(j);
             avanzarTurno();
+
+        } catch (JugadaInvalidaException e) {
+            System.out.println("[ERROR ESTRATEGIA] Máquina intentó jugada inválida: " + e.getMessage());
         }
     }
 
 
 
-    private boolean jugarCarta(Jugador j, Carta c) {
-        /* Aqui si la carta hace pasar de 50, NO se juega vuelve y se recalcula para hacer una jugada válida*/
+    private void jugarCarta(Jugador j, Carta c) throws JugadaInvalidaException {
+
+        /* Si la carta hace que la suma pase de 50, lanzamos la excepción CHECKED*/
         if (!ReglaCincuentazo.puedeJugar(sumaMesa, c)) {
-            System.out.println("Jugada inválida de " + j.getNombre() + " con " + c);
-            return false;
+            throw new JugadaInvalidaException(
+                    "La carta "+c+" haría que la suma supere 50. Suma actual: "+ sumaMesa
+            );
         }
+
 
         mesa.add(c);
-        sumaMesa = ReglaCincuentazo.calcularNuevaSuma(sumaMesa, c);
+        sumaMesa=ReglaCincuentazo.calcularNuevaSuma(sumaMesa, c);
 
-        System.out.println(j.getNombre() + " jugó: " + c +
-                " (suma=" + sumaMesa + ")");
-        return true;
+        System.out.println(j.getNombre()+" jugó: "+c +
+                " -> nueva suma="+sumaMesa);
     }
+
 
     /* esta funcion me permite jugar la  primera carta que no pasa de 50, si no hay cartas jugables, inmediatamente retornará null
       ya que no  tendra una jugada valida */
@@ -176,7 +189,7 @@ public class Partida {
      el ganador de la partida */
 
     private void eliminarJugadorActual() {
-        Jugador j = getJugadorActual();
+        Jugador j=getJugadorActual();
         j.eliminarJugador();
 
         /* guardaremos aqui  el historial de eliminados para luego mostrar en la interfaz*/
@@ -187,7 +200,7 @@ public class Partida {
             mazo.agregarCartas(new ArrayList<>(j.getMano()));
             j.getMano().clear();
         }
-        System.out.println("Jugador eliminado: " + j.getNombre());
+        System.out.println("Jugador eliminado: "+j.getNombre());
 
         /* codigo para eliminar de la lista de jugadores*/
         jugadores.remove(indiceJugadorActual);
@@ -205,9 +218,9 @@ public class Partida {
 
         /*ya si solo queda un solo jugador, sera el ganador*/
         if (jugadores.size() == 1) {
-            partidaTerminada = true;
-            ganador = jugadores.get(0);
-            System.out.println("Ganador: " + ganador.getNombre());
+            partidaTerminada=true;
+            ganador=jugadores.get(0);
+            System.out.println("Ganador: "+ganador.getNombre());
         }
     }
     public boolean existeJugadorConNombre(String nombre) {
@@ -228,7 +241,7 @@ public class Partida {
             return;
         }
         /* Cartas para devolver al mazo: todas menos la última*/
-        List<Carta> paraMazo = new ArrayList<>(mesa.subList(0,mesa.size()- 1));
+        List<Carta> paraMazo=new ArrayList<>(mesa.subList(0,mesa.size()- 1));
 
         /*Dejamos solo la última carta en la mesa*/
         Carta ultima= mesa.get(mesa.size() - 1);
@@ -236,7 +249,7 @@ public class Partida {
         mesa.add(ultima);
         /*Enviamos cartas al mazo y barajar */
         mazo.agregarCartas(paraMazo);
-        System.out.println("Mazo repuesto desde la mesa. Cartas añadidas: " + paraMazo.size());
+        System.out.println("Mazo repuesto desde la mesa. Cartas añadidas: "+paraMazo.size());
     }
 
     /*==========================ROBAR CARTA =================================*/
@@ -254,7 +267,7 @@ public class Partida {
         }
 
         try {
-            Carta nueva = mazo.tomarCarta();
+            Carta nueva=mazo.tomarCarta();
             j.agregarCarta(nueva);
             System.out.println(j.getNombre()+" robó carta: "+nueva);
         } catch (MazoVacioException e) {
