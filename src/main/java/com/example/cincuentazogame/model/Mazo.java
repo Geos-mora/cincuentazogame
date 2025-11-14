@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Mazo {
         /*lista privada de cartas*/
-        private List<Carta> cartas;
+        List<Carta> cartas;
         /*arreglo estatico de tipo string para definir los palos*/
         private static final String[] PALOS = {"Corazones", "Diamantes", "Tréboles", "Picas"};
         /*arreglo estatico de tipo string para definir los valores*/
