@@ -6,6 +6,7 @@ import com.example.cincuentazogame.model.Partida;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,7 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TableroController {
-    private static final String BASE_IMG = "/com/example/cincuentazogame/view/recursos/cartas/";
+    private static final String BASE_IMG="/com/example/cincuentazogame/view/recursos/cartas/";
 
     private Partida partida;
 
@@ -37,7 +38,7 @@ public class TableroController {
 
     /* ==========================================================================*/
 
-    public void mostrarBots(int numBots) {
+    public void mostrarBots(int numBots){
         imgBot1.setVisible(false);
         imgBot2.setVisible(false);
         imgBot3.setVisible(false);
@@ -136,9 +137,9 @@ public class TableroController {
 
 
 
-    /* Este método lo llama el MainController al crear la escena*/
-    public void iniciarPartida(int numBots) {
-        partida = new Partida(numBots);
+    /* Este metodo lo llama el maincontroller al crear la escena */
+    public void iniciarPartida(int numBots){
+        partida=new Partida(numBots);
         actualizarVista();
         iniciarTurnos();
     }
@@ -157,7 +158,7 @@ public class TableroController {
 
 
 
-    /* Ciclo de turnos automáticos (humano + bots)*/
+    /*ciclo de turnos automaticos (humano y bot)*/
     private void iniciarTurnos() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -170,7 +171,7 @@ public class TableroController {
                         return;
                     }
 
-                    Jugador actual = partida.getJugadorActual();
+                    Jugador actual=partida.getJugadorActual();
                     if (actual.esMaquina()) {
                         partida.turnoMaquina();
                         actualizarVista();
@@ -180,26 +181,53 @@ public class TableroController {
         }, 1000, 2000); /* ejecuta cada 2 segundos*/
     }
 
-    /* Evento del botón "Jugar carta" (para el jugador humano)*/
+    /* Evento del boton jugar carta para el jugador */
 
-    /* Cuando termina la partida*/
+    /* cuando termina la partida */
     private void mostrarPantallaFinal() {
+        mostrarAlertFin();
+    }
+
+
+    /*alert box para el final del juego
+    * (sea que se pierda o gane)*/
+    private void mostrarAlertFin(){
+        /*mensaje del alertbox*/
+        String mensaje="Juego terminado, gano: " + partida.getGanador().getNombre() + "\n\n deseas volver al menu? principal?";
+        javafx.scene.control.Alert alert=new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+        alert.setTitle("fin de la partida");
+        alert.setHeaderText("resultado:");
+        alert.setContentText(mensaje);
+
+        /*botones del alert box*/
+        ButtonType btnMenu=new ButtonType("Volver al menu");
+        ButtonType btnSalir=new ButtonType("Salir del juego");
+        alert.getButtonTypes().setAll(btnMenu, btnSalir);
+        alert.showAndWait().ifPresent(respuesta->{
+            if (respuesta==btnMenu){
+                volverAlMenuPrincipal();
+
+            } else{
+                Platform.exit();
+            }
+        });
+    }
+
+    /*
+    * Metodo que carga FXML del menu principal:*/
+    private void volverAlMenuPrincipal(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/cincuentazogame/view/endgame-view.fxml"));
-            Parent root = loader.load();
-
-            EndGameController controller = loader.getController();
-            controller.mostrarResultado(partida.getGanador());
-
-            Stage stage = (Stage) lblSumaMesa.getScene().getWindow();
+            FXMLLoader loader=new FXMLLoader(getClass().getResource("/com/example/cincuentazogame/view/main-view.fxml"));
+            Parent root =loader.load();
+            Stage stage=(Stage) lblSumaMesa.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setTitle("Cincuentazo-menu principal");
             stage.show();
 
-        } catch (IOException e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
-
 
 
 }
