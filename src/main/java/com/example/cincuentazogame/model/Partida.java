@@ -23,10 +23,24 @@ public class Partida {
         this.jugadores=new ArrayList<>();
         this.mesa=new ArrayList<>();
 
+        /*
         jugadores.add(new JugadorHumano("Jugador"));
         for (int i=1; i <=cantidadJugadoresMaquina; i++) {
             jugadores.add(new JugadorMaquina("Máquina "+i));
+        }*/
+
+        /*para usaer el patron de creacion factory method*/
+        jugadores.add(JugadorFactory.crearJugador("humano", "Jugador"));
+        /*llama al metodo crearJugador() de la clase JugadorFactory, le pasa dos parametros "humano" y "jugador" y revisa el tipo
+        * con el .add agrega el jugador creado a la lista de jugadores */
+
+        for (int i=1; i<=cantidadJugadoresMaquina; i++){
+            /*ciclo que se repita tantas veces como bots haya elegido el jugador crear*/
+            jugadores.add(JugadorFactory.crearJugador("maquina", "Máquina " +i));
+            /*Llama al Factory para que cree un jugador de tipo "maquina" y le asigna nombres individuales automáticamente
+            * con el .add agrega al juagador maquina a la lista de jugadores*/
         }
+
 
         prepararPartida();
     }
@@ -185,7 +199,7 @@ public class Partida {
         /* codigo para eliminar de la lista de jugadores*/
         jugadores.remove(indiceJugadorActual);
 
-        // Ajustar índice de turno
+        /*Ajustar índice de turno*/
         if (jugadores.isEmpty()) {
             partidaTerminada= true;
             ganador= null;
@@ -204,7 +218,7 @@ public class Partida {
         }
     }
 
-    //=====================================REPONER MAZO===================000000
+    /*=====================================REPONER MAZO===================*/
     private void reponerMazoDesdeMesa() {
        /*  Si la mesa tiene 0 o 1 carta, no hay suficientes para reponer*/
         if (mesa.size() <= 1) {
@@ -222,7 +236,7 @@ public class Partida {
         System.out.println("Mazo repuesto desde la mesa. Cartas añadidas: " + paraMazo.size());
     }
 
-    //==========================ROBAR CARTA =================================00
+    /*==========================ROBAR CARTA =================================*/
 
     private void robarCarta(Jugador j) {
         /*Si el mazo está vacío, intentamos reponerlo desde la mesa*/
@@ -230,7 +244,7 @@ public class Partida {
             reponerMazoDesdeMesa();
         }
 
-        // SI no hay cartas ni en mazo ni en mesa para reponer
+        /*SI no hay cartas ni en mazo ni en mesa para reponer*/
         if (mazo.estaVacio()) {
             System.out.println("No hay cartas disponibles para robar.");
             return;
