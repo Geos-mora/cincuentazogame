@@ -4,7 +4,6 @@
     -fx-padding:10;
 }
 .contenedorBody{
-    -fx-border-color:black;
     -fx-alignment:center;
     -fx-padding:10;
 }
@@ -19,3 +18,13 @@
       -fx-background-color:#FCDCDC;
       -fx-padding:10;
 }
+.contenedorLabel2{
+    -fx-alignment:CENTER_LEFT;
+
+}
+.contenedorLabel2 > Label{
+  -fx-font-weight: bold;
+  -fx-padding:0 0 15 15;
+
+}
+
