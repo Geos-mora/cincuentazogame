@@ -252,7 +252,7 @@ public class Partida {
 
 
 
-    private void avanzarTurno() {
+    public void avanzarTurno() {
         if (partidaTerminada) return;
 
         indiceJugadorActual=(indiceJugadorActual +1) % jugadores.size();
