@@ -36,7 +36,7 @@ public class Partida {
 
         for (int i=1; i<=cantidadJugadoresMaquina; i++){
             /*ciclo que se repita tantas veces como bots haya elegido el jugador crear*/
-            jugadores.add(JugadorFactory.crearJugador("maquina", "Máquina " +i));
+            jugadores.add(JugadorFactory.crearJugador("maquina", "Bot " +i));
             /*Llama al Factory para que cree un jugador de tipo "maquina" y le asigna nombres individuales automáticamente
             * con el .add agrega al juagador maquina a la lista de jugadores*/
         }

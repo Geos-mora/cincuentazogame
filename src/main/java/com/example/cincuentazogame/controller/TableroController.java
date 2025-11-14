@@ -25,6 +25,9 @@ public class TableroController {
     private static final String BASE_IMG="/com/example/cincuentazogame/view/recursos/cartas/";
 
     private Partida partida;
+    private Thread hiloCronometro;
+    private volatile boolean cronometroActivo = false;
+    private int segundosTranscurridos = 0;
 
     /* ====== Elementos del tablero (asigna los fx:id en tablero-view.fxml) ======*/
     @FXML private Label lblSumaMesa;
@@ -34,9 +37,57 @@ public class TableroController {
     @FXML private ImageView imgBot1;
     @FXML private ImageView imgBot2;
     @FXML private ImageView imgBot3;
+    @FXML private Label lblTimer;
 
 
-    /* ==========================================================================*/
+    /* =============================== HILO DEL TIMER ===========================================*/
+    private void iniciarCronometro() {
+        cronometroActivo = true;
+        segundosTranscurridos = 0;
+
+        if (lblTimer !=null) {
+            lblTimer.setText("Tiempo: 00:00");/*poner un texto inicial*/
+        }
+
+        /* Creamos el hilo del cronómetro dentro del Runnable va el código que el hilo va a ejecutar en paralelo*/
+        hiloCronometro = new Thread(() -> {
+            /*este bucle que se ejecuta mientras el cronometroActivo sea true y que  exista una partida y no haya terminado*/
+            while (cronometroActivo && partida != null && !partida.isPartidaTerminada()) {
+                try {
+                    /* pausa el hilo 1000 milesegundos =  1 segundo*/
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+                /*aqui aumentamos el contador un segundo */
+                segundosTranscurridos++;
+                /*  usamos Platform.runLater(), que agenda la actualización en
+                    el hilo de la UI */
+                Platform.runLater(() -> {
+                    if (lblTimer != null) {
+                        lblTimer.setText("Tiempo: " + formatearTiempo(segundosTranscurridos));
+                    }
+                });
+            }
+        });
+
+        hiloCronometro.setDaemon(true); /* no se bloquea el cierre de la app*/
+        hiloCronometro.start();
+    }
+
+    /* esta funcion me sirve para convertir  los segundos totales a formato mm:ss*/
+    private String formatearTiempo(int segundos) {
+        int min = segundos / 60;
+        int seg = segundos % 60;
+        return String.format("%02d:%02d", min, seg);
+    }
+    private void detenerCronometro() {
+        cronometroActivo = false;
+        if (hiloCronometro != null && hiloCronometro.isAlive()) {
+            hiloCronometro.interrupt();
+        }
+    }
+//====================================================================================
 
     public void mostrarBots(int numBots){
         imgBot1.setVisible(false);
@@ -141,6 +192,7 @@ public class TableroController {
     public void iniciarPartida(int numBots){
         partida=new Partida(numBots);
         actualizarVista();
+        iniciarCronometro();
         iniciarTurnos();
     }
 
@@ -167,6 +219,7 @@ public class TableroController {
                 Platform.runLater(() -> {
                     if (partida.isPartidaTerminada()) {
                         timer.cancel();
+                        detenerCronometro();
                         mostrarPantallaFinal();
                         return;
                     }
@@ -185,6 +238,7 @@ public class TableroController {
 
     /* cuando termina la partida */
     private void mostrarPantallaFinal() {
+        detenerCronometro();
         mostrarAlertFin();
     }
 
