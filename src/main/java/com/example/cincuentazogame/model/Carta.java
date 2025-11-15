@@ -4,7 +4,7 @@ public class Carta {
     private final String palo;
     private final String valor;
     private final int puntaje;
-    private final String imagenFile; // ej: "2C.png"
+    private final String imagenFile; /*ej: "2C.png"*/
 
     public Carta(String palo, String valor) {
         this.palo = palo;
