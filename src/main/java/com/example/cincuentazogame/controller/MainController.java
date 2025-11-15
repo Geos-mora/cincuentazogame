@@ -14,24 +14,37 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 public class MainController{
+    @FXML private Button btnUnBot;
+    @FXML private Button btnDosBots;
+    @FXML private Button btnTresBots;
 
     private int numeroBots=2; /* valor por defecto si no selecciona*/
     @FXML
     private void seleccionarUnBot(){
         numeroBots=1;
         System.out.println("Seleccionado 1 bot");
+        btnUnBot.setStyle("-fx-background-color: #5C0C7D;");
+        btnDosBots.setStyle("");
+        btnTresBots.setStyle("");
+
     }
 
     @FXML
     private void seleccionarDosBots(){
         numeroBots=2;
         System.out.println("Seleccionado 2 bots");
+        btnDosBots.setStyle("-fx-background-color: #5C0C7D;");
+        btnUnBot.setStyle("");
+        btnTresBots.setStyle("");
     }
 
     @FXML
     private void seleccionarTresBots(){
         numeroBots=3;
         System.out.println("Seleccionado 3 bots");
+        btnTresBots.setStyle("-fx-background-color: #5C0C7D;");
+        btnUnBot.setStyle("");
+        btnDosBots.setStyle("");
     }
 
     /*esta función se encarga por medio de un onAction de mostrar la segunda interfaz del juego,
