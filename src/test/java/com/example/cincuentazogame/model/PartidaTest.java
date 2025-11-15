@@ -15,7 +15,8 @@ class PartidaTest {
     @Test
     void testRepartirCartasIniciales(){
 
-        Partida partida=new Partida(2);
+        Partida partida=new Partida("partidaTest", 2);
+
         /*se crea un nuevo objeto partida
         el parametro 2 valida para 1 humano+2 máquinas=3 jugadores*/
 
@@ -41,7 +42,7 @@ class PartidaTest {
 
     @Test
     void testAvanzarTurno(){
-        Partida partida=new Partida(2); /*1 humano + 2 máquinas */
+        Partida partida=new Partida("partidaTest", 2); /*1 humano + 2 máquinas */
 
         Jugador jugador0=partida.getJugadorActual(); /*turno 0*/
         /*Obtiene y guarda en jugador0 la referencia al jugador que tiene el turno inicial*/
@@ -79,7 +80,7 @@ class PartidaTest {
 
     @Test
     void testTurnoHumanoCartaValida() {
-        Partida partida=new Partida(1); /* crea la partida con parametro 1, es decir, 1 humano + 1 máquina*/
+        Partida partida=new Partida("partidaTest", 1); /* crea la partida con parametro 1, es decir, 1 humano + 1 máquina*/
 
         Jugador humano=partida.getJugadorHumano();
         /*obtiene el jugador humano directamente desde la partida, se guarda en la variable humano*/
@@ -125,7 +126,7 @@ class PartidaTest {
     @Test
     void testEliminarJugador() throws NoSuchFieldException,IllegalAccessException{
 
-        Partida partida=new Partida(1);
+        Partida partida=new Partida("partidaTest" , 1);
         Jugador humano=partida.getJugadorHumano();
 
         /*forzar la mesa a estar casi en 50*/
