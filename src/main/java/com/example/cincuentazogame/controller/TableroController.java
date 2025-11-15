@@ -220,8 +220,8 @@ public class TableroController {
 
 
     /* Este metodo lo llama el maincontroller al crear la escena */
-    public void iniciarPartida(int numBots){
-        partida=new Partida(numBots);
+    public void iniciarPartida(String nombreJugador, int numBots){
+        partida = new Partida(nombreJugador, numBots);
         actualizarVista();
         iniciarCronometro();
         iniciarTurnos();

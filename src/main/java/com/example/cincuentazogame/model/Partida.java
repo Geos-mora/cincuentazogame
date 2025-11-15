@@ -23,7 +23,7 @@ public class Partida {
     private final List<String> historialEliminados=new ArrayList<>();
     /* --- Construcción ---*/
 
-    public Partida(int cantidadJugadoresMaquina) {
+    public Partida(String nombreHumano, int cantidadJugadoresMaquina) {
         this.mazo=new Mazo();
         this.jugadores=new ArrayList<>();
         this.mesa=new ArrayList<>();
@@ -35,7 +35,7 @@ public class Partida {
        }*/
 
         /*para usaer el patron de creacion factory method*/
-        jugadores.add(JugadorFactory.crearJugador("humano", "Jugador"));
+        jugadores.add(JugadorFactory.crearJugador("humano", nombreHumano));
         /*llama al metodo crearJugador() de la clase JugadorFactory, le pasa dos parametros "humano" y "jugador" y revisa el tipo
         * con el .add agrega el jugador creado a la lista de jugadores */
 

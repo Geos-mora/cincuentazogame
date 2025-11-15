@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -17,6 +18,7 @@ public class MainController{
     @FXML private Button btnUnBot;
     @FXML private Button btnDosBots;
     @FXML private Button btnTresBots;
+    @FXML private TextField ponerNombreJugador;
 
     private int numeroBots=2; /* valor por defecto si no selecciona*/
     @FXML
@@ -47,27 +49,35 @@ public class MainController{
         btnDosBots.setStyle("");
     }
 
+
+    private String getNombreJugador() {
+        String nombre = ponerNombreJugador.getText();
+        if (nombre == null || nombre.isBlank()) {
+            return "Jugador";  // nombre por defecto
+        }
+        return nombre.trim();
+    }
+
     /*esta función se encarga por medio de un onAction de mostrar la segunda interfaz del juego,
      esta segunda interfaz es el tablero donde se jugara con el número de
      bots que el usuario quiera jugar*/
     @FXML
     private void onJugarPoker(ActionEvent e){
         try{
-            /*carga FXML del tablero*/
-            URL url=getClass().getResource("/com/example/cincuentazogame/view/tablero-view.fxml");
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/cincuentazogame/view/tablero-view.fxml")
+            );
+            Parent root =loader.load();
 
-            FXMLLoader loader=new FXMLLoader(url);
-            Parent root=loader.load();
-            /*inicia la partida con el numero de bots elegido*/
 
-            TableroController controller=loader.getController();
-            controller.iniciarPartida(numeroBots); /* numero de bots que se elijan*/
+            String nombreJugador= getNombreJugador();
+
+
+            TableroController controller =loader.getController();
+            controller.iniciarPartida(nombreJugador, numeroBots);
+
             controller.mostrarBots(numeroBots);
-
-
-
-
-            Stage stage=(Stage) ((Node) e.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Cincuentazo - Tablero");
             stage.show();
@@ -75,8 +85,8 @@ public class MainController{
         } catch (Exception ex){
             ex.printStackTrace();
         }
-
     }
+
     /* ------------------------------------------------------------------------------------------------------------*/
 
     /*prueba rapido solo para ensayar que las clases carta, mazo, jugador,
