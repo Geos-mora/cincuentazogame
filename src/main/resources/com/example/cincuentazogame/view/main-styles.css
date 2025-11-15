@@ -102,3 +102,7 @@
     -fx-scale-x: 1.08;
     -fx-scale-y: 1.08;
 }
+
+.contenerdorTextfield{
+    -fx-alignment:center;
+}

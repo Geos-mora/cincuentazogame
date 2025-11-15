@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="400" prefWidth="600" stylesheets="@main-styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cincuentazogame.controller.MainController">
+<BorderPane prefHeight="400" prefWidth="600" stylesheets="@main-styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cincuentazogame.controller.MainController">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" styleClass="header" BorderPane.alignment="CENTER">
             <Label text="CINCUENTAZO" />
@@ -35,7 +35,11 @@
                     <Button fx:id="btnDosBots" onAction="#seleccionarDosBots" text="2" />
                     <Button fx:id="btnTresBots" onAction="#seleccionarTresBots" text="3" />
                 </HBox>
-            <TextField fx:id="ponerNombreJugador" prefHeight="26.0" prefWidth="523.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="contenerdorTextfield">
+               <children>
+                  <TextField fx:id="ponerNombreJugador" prefHeight="26.0" prefWidth="257.0" promptText="ingresa tu nombre..." />
+               </children>
+            </HBox>
             </VBox>
         </VBox>
     </center>
